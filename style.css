@@ -1,0 +1,87 @@
+/* style.css */
+body {
+    font-family: 'Open Sans', 'Helvetica Neue', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f1f3f6; /* Gri deschis pentru fundal */
+    color: #333;
+}
+
+.header {
+    background-color: #2c3e50; /* Culoarea asociației (închisă) */
+    color: white;
+    text-align: center;
+    padding: 20px 10px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 1.5em;
+    font-weight: 700;
+}
+
+.header p {
+    margin: 5px 0 0;
+    opacity: 0.8;
+    font-size: 0.9em;
+}
+
+.container {
+    padding: 15px;
+    max-width: 600px;
+    margin: 0 auto; /* Centrează pe ecrane mari */
+}
+
+.card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    transition: transform 0.2s ease;
+}
+
+.card:active {
+    transform: scale(0.98); /* Efect de apăsare la click */
+}
+
+.card h2 {
+    margin: 0 0 10px;
+    color: #2c3e50;
+    font-size: 1.2em;
+}
+
+.card p {
+    margin: 0 0 15px;
+    line-height: 1.5;
+    color: #666;
+}
+
+.btn-main {
+    display: inline-block;
+    background-color: #e67e22; /* Portocaliu sportiv pentru acțiune */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 0.9em;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.btn-main:hover {
+    background-color: #d35400;
+}
+
+.status-offline {
+    background-color: #ffdd57;
+    padding: 5px;
+    text-align: center;
+    border-radius: 8px;
+    font-size: 0.8em;
+    margin-bottom: 10px;
+    display: none; /* Ascuns implicit */
+}

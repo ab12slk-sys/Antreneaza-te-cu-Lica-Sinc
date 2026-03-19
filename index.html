@@ -3,26 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sebeșul Aleargă</title>
+    <title>Sebeșul Aleargă - Platformă Antrenamente</title>
     <link rel="manifest" href="manifest.json">
-    <link rel="stylesheet" href="style.css"> <style>
-        body { font-family: sans-serif; text-align: center; padding: 20px; background: #f4f4f4; }
-        .card { background: white; padding: 15px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-bottom: 10px; }
-        h1 { color: #2c3e50; }
-    </style>
+    <link rel="stylesheet" href="style.css"> <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <h1>Sebeșul Aleargă 🏃‍♂️</h1>
-    <div class="card">
-        <h3>Plan Antrenament Săptămânal</h3>
-        <p>Verifică aici exercițiile recomandate de antrenor (UESCA).</p>
+
+    <div class="header">
+        <h1>Antrenează-te cu Lică Sinc🏃‍♂️</h1>
+        <p>Președinte Asociația „Sebeșul Aleargă”</p>
     </div>
-    
+
+    <div class="container">
+        
+        <div id="offline-notice" class="status-offline">
+            Aplicația rulează în mod offline. Datele pot fi vechi.
+        </div>
+
+        <div class="card">
+            <h2>🏋️‍♂️ Antrenamentul de Azi</h2>
+            <p><strong>Obiectiv:</strong> Dezvoltare Rezistență (UESCA)</p>
+            <p>30 minute alergare ușoară (Zona 2). Menține un ritm la care poți purta o conversație lejeră.</p>
+            
+            <button class="btn-main" onclick="toggleDetails('detalii-azi')">Vezi detalii exerciții</button>
+            
+            <div id="detalii-azi" style="display: none; margin-top: 15px; padding-top: 15px; border-top: 1px solid #eee;">
+                <p><strong>Detalii suplimentare:</strong> Nu uita de încălzirea dinamică (5 min) înainte de start și de stretching la final.</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>📊 Plan Săptămânal</h2>
+            <p>Verifică planul complet de antrenament generat de Lică, adaptat pentru cursele din Alba.</p>
+            <a href="#" class="btn-main">Deschide Planul</a>
+        </div>
+        
+    </div>
+
     <script>
+        // Funcție simplă pentru interactivitate (afișare/ascundere detalii)
+        function toggleDetails(id) {
+            var x = document.getElementById(id);
+            if (x.style.display === "none") {
+                x.style.display = "block";
+            } else {
+                x.style.display = "none";
+            }
+        }
+
+        // Înregistrarea Service Worker-ului
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('sw.js')
             .then(() => console.log("Aplicația este gata de funcționare offline!"));
         }
+        
+        // Detectare stare offline (interactivitate automată)
+        window.addEventListener('offline', () => {
+            document.getElementById('offline-notice').style.display = 'block';
+        });
+        window.addEventListener('online', () => {
+            document.getElementById('offline-notice').style.display = 'none';
+        });
     </script>
 </body>
 </html>
