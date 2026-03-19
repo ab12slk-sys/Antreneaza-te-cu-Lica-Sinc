@@ -1,5 +1,30 @@
+self.addEventListener('install', event => {
+  self.skipWaiting(); // <--- Această linie forțează activarea noii versiuni imediat
+});
+const cacheName = 'sebes-alearga-v3'; // <--- Schimbă cifra de fiecare dată când faci un update!
+const assets = [
+  'index.html',
+  'manifest.json',
+  // adaugă aici alte fișiere (imagini, css) pe care vrei să le salvezi offline
+];
+
+self.addEventListener('install', e => {
+  e.waitUntil(
+    caches.open(cacheName).then(cache => {
+      cache.addAll(assets);
+    })
+  );
+});
+
+self.addEventListener('fetch', e => {
+  e.respondWith(
+    caches.match(e.request).then(res => {
+      return res || fetch(e.request);
+    })
+  );
+});
 // sw.js - Versiunea 2 (Actualizată)
-const cacheName = 'sebes-alearga-v2'; // <--- Am schimbat din v1 in v2
+const cacheName = 'sebes-alearga-v3'; // <--- Schimbă cifra de fiecare dată când faci un update!
 const assets = [
   'index.html',
   'manifest.json',
