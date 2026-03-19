@@ -1,62 +1,45 @@
-self.addEventListener('install', event => {
-  self.skipWaiting(); // <--- Această linie forțează activarea noii versiuni imediat
-});
-const cacheName = 'sebes-alearga-v3'; // <--- Schimbă cifra de fiecare dată când faci un update!
+// Numele cache-ului - Schimbă 'v4' în 'v5' data viitoare când modifici ceva în index sau style
+const cacheName = 'sebes-alearga-v4';
+
+// Fișierele pe care aplicația le salvează pentru a merge offline
 const assets = [
+  './',
   'index.html',
   'manifest.json',
-  // adaugă aici alte fișiere (imagini, css) pe care vrei să le salvezi offline
+  'style.css'
 ];
 
+// 1. Instalarea: Salvează fișierele în memoria telefonului
 self.addEventListener('install', e => {
   e.waitUntil(
     caches.open(cacheName).then(cache => {
-      cache.addAll(assets);
-    })
-  );
-});
-
-self.addEventListener('fetch', e => {
-  e.respondWith(
-    caches.match(e.request).then(res => {
-      return res || fetch(e.request);
-    })
-  );
-});
-// sw.js - Versiunea 2 (Actualizată)
-const cacheName = 'sebes-alearga-v3'; // <--- Schimbă cifra de fiecare dată când faci un update!
-const assets = [
-  'index.html',
-  'manifest.json',
-  'style.css', // <--- Am adaugat fișierul de design in cache
-  // Dacă ai adăugat fonturi sau imagini, pune-le și pe ele aici
-];
-
-self.addEventListener('install', e => {
-  e.waitUntil(
-    caches.open(cacheName).then(cache => {
-      console.log('Service Worker: Caching Files');
+      console.log('SW: Arhivare fișiere în cache');
       return cache.addAll(assets);
     })
   );
+  // Forțează Service Worker-ul nou să devină activ imediat
+  self.skipWaiting();
 });
 
-// Ștergerea vechiului cache (ca telefonul să vadă modificările)
+// 2. Activarea: Șterge vechile versiuni (v1, v2, v3) ca să facă loc celei noi
 self.addEventListener('activate', e => {
   e.waitUntil(
     caches.keys().then(cacheNames => {
       return Promise.all(
         cacheNames.map(cache => {
           if (cache !== cacheName) {
-            console.log('Service Worker: Clearing Old Cache');
+            console.log('SW: Ștergere cache vechi:', cache);
             return caches.delete(cache);
           }
         })
       );
     })
   );
+  // Permite SW-ului să preia controlul paginii imediat
+  return self.clients.claim();
 });
 
+// 3. Fetch: Încearcă să încarce din cache, dacă nu, cere de pe internet
 self.addEventListener('fetch', e => {
   e.respondWith(
     caches.match(e.request).then(res => {
