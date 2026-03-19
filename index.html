@@ -8,62 +8,71 @@
     <link rel="stylesheet" href="style.css"> <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-
-    <div class="header">
-        <h1>Antrenează-te cu Lică Sinc🏃‍♂️</h1>
-        <p>Președinte Asociația „Sebeșul Aleargă”</p>
+    <div id="login-screen" class="container" style="margin-top: 50px;">
+        <div class="card">
+            <h2>Autentificare Membru</h2>
+            <p>Introdu datele primite de la asociație.</p>
+            <input type="text" id="username" placeholder="Utilizator" style="width: 80%; padding: 10px; margin-bottom: 10px; border-radius: 5px; border: 1px solid #ddd;"><br>
+            <input type="password" id="password" placeholder="Parolă" style="width: 80%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ddd;"><br>
+            <button class="btn-main" onclick="checkLogin()">Intră în aplicație</button>
+            <p id="error-msg" style="color: red; display: none; font-size: 0.8em; margin-top: 10px;">Date incorecte!</p>
+        </div>
     </div>
 
-    <div class="container">
-        
-        <div id="offline-notice" class="status-offline">
-            Aplicația rulează în mod offline. Datele pot fi vechi.
+    <div id="app-content" style="display: none;">
+        <div class="header">
+            <h1>Sebeșul Aleargă 🏃‍♂️</h1>
+            <p id="welcome-user"></p>
+            <button onclick="logout()" style="background: none; border: 1px solid white; color: white; padding: 5px 10px; border-radius: 5px; cursor: pointer; margin-top: 10px;">Ieșire</button>
         </div>
 
-        <div class="card">
-            <h2>🏋️‍♂️ Antrenamentul de Azi</h2>
-            <p><strong>Obiectiv:</strong> Dezvoltare Rezistență (UESCA)</p>
-            <p>30 minute alergare ușoară (Zona 2). Menține un ritm la care poți purta o conversație lejeră.</p>
-            
-            <button class="btn-main" onclick="toggleDetails('detalii-azi')">Vezi detalii exerciții</button>
-            
-            <div id="detalii-azi" style="display: none; margin-top: 15px; padding-top: 15px; border-top: 1px solid #eee;">
-                <p><strong>Detalii suplimentare:</strong> Nu uita de încălzirea dinamică (5 min) înainte de start și de stretching la final.</p>
+        <div class="container">
+            <div class="card">
+                <h2>🏋️‍♂️ Planul tău personal</h2>
+                <p>Bine ai revenit! Antrenamentul de azi te așteaptă.</p>
             </div>
         </div>
-
-        <div class="card">
-            <h2>📊 Plan Săptămânal</h2>
-            <p>Verifică planul complet de antrenament generat de Lică, adaptat pentru cursele din Alba.</p>
-            <a href="#" class="btn-main">Deschide Planul</a>
-        </div>
-        
     </div>
 
     <script>
-        // Funcție simplă pentru interactivitate (afișare/ascundere detalii)
-        function toggleDetails(id) {
-            var x = document.getElementById(id);
-            if (x.style.display === "none") {
-                x.style.display = "block";
+        // Tabel simplu de utilizatori (Doar pentru test!)
+        const users = {
+            "lica": "sebes2026",
+            "coleg1": "alergare123",
+            "membru": "start"
+        };
+
+        function checkLogin() {
+            const user = document.getElementById('username').value.toLowerCase();
+            const pass = document.getElementById('password').value;
+
+            if (users[user] && users[user] === pass) {
+                // Salvează starea de login în memoria telefonului (Local Storage)
+                localStorage.setItem('isLoggedIn', 'true');
+                localStorage.setItem('currentUser', user);
+                showApp(user);
             } else {
-                x.style.display = "none";
+                document.getElementById('error-msg').style.display = 'block';
             }
         }
 
-        // Înregistrarea Service Worker-ului
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js')
-            .then(() => console.log("Aplicația este gata de funcționare offline!"));
+        function showApp(user) {
+            document.getElementById('login-screen').style.display = 'none';
+            document.getElementById('app-content').style.display = 'block';
+            document.getElementById('welcome-user').innerText = "Salut, " + user.toUpperCase() + "!";
         }
-        
-        // Detectare stare offline (interactivitate automată)
-        window.addEventListener('offline', () => {
-            document.getElementById('offline-notice').style.display = 'block';
-        });
-        window.addEventListener('online', () => {
-            document.getElementById('offline-notice').style.display = 'none';
-        });
+
+        function logout() {
+            localStorage.removeItem('isLoggedIn');
+            location.reload(); // Reîmcarcă pagina pentru a cere login din nou
+        }
+
+        // Verifică la deschidere dacă utilizatorul este deja logat
+        window.onload = function() {
+            if (localStorage.getItem('isLoggedIn') === 'true') {
+                showApp(localStorage.getItem('currentUser'));
+            }
+        };
     </script>
 </body>
 </html>
